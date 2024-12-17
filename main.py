@@ -1,11 +1,12 @@
 # Third Party Libraries
+# Third Party Libraries
 from starlette.applications import Starlette
 from starlette.routing import Mount, Route
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
 # Fastapi Vite
-from fastapi_vite import runner, settings, vite_asset, vite_hmr_client
+from fastapi_vite_dara import runner, settings, vite_asset, vite_hmr_client
 
 templates = Jinja2Templates(directory="assets/templates")
 templates.env.globals["vite_hmr_client"] = vite_hmr_client

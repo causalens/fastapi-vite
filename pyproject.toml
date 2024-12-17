@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "fastapi_vite"
-version = "0.3.2"
-description = "Integration utilities for FastAPI and ViteJS."
+name = "fastapi_vite_dara"
+version = "0.3.4"
+description = "Fork of fastapi-vite to support wider range of jinja2 version."
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Framework :: AsyncIO",
@@ -10,15 +10,16 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3 :: Only",
 ]
-authors = ["Cody Fincher <cody.fincher@gmail.com>"]
-keywords = ["fastapi","starlette","vite"]
+authors = ["causaLens <support@causalens.com>", "Cody Fincher <cody.fincher@gmail.com>"]
+keywords = ["fastapi","starlette","vite", "dara"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/cofin/fastapi-vite"
-repository = "https://github.com/cofin/fastapi-vite"
+homepage = "https://github.com/causalens/fastapi-vite"
+repository = "https://github.com/causalens/fastapi-vite"
 packages = [
-    { include = "fastapi_vite", from = "src/"}
+    { include = "fastapi_vite_dara", from = "src/"}
 ]
+
 [tool.poetry.dependencies]
 python = ">=3.8,<4"
 fastapi = "*"
@@ -41,7 +42,7 @@ autoflake = ">=1.4"
 pip-licenses = ">=3.5.3"
 wemake-python-styleguide = ">=0.16.0"
 uvicorn = "*"
-
+docutils = "0.18.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

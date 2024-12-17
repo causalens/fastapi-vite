@@ -1,6 +1,6 @@
 .DEFAULT_GOAL:=help
 .ONESHELL:
-PKGNAME=src/fastapi_vite
+PKGNAME=src/fastapi_vite_dara
 ENV_PREFIX=$(shell python3 -c "if __import__('pathlib').Path('.venv/bin/pip').exists(): print('.venv/bin/')")
 USING_POETRY=$(shell grep "tool.poetry" pyproject.toml && echo "yes")
 USING_DOCKER=$(shell grep "TIMELY_USE_DOCKER=true" .env && echo "yes")
@@ -89,4 +89,3 @@ version-bump-minor: ## bump minor version
 	poetry run bump2version --allow-dirty  minor
 version-bump-patch: ## bump patch version
 	poetry run bump2version patch
-

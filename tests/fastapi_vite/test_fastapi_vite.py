@@ -1,8 +1,9 @@
 # Third Party Libraries
+# Third Party Libraries
 from starlette.testclient import TestClient
 
 # Fastapi Vite
-from fastapi_vite import __version__
+from fastapi_vite_dara import __version__
 
 
 def test_version():

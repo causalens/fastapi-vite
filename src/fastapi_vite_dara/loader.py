@@ -3,11 +3,16 @@ import json
 from typing import ClassVar, Dict, Optional
 from urllib.parse import urljoin
 
-# Third Party Libraries
-import jinja2
-
 # Fastapi Vite
-from fastapi_vite.config import settings
+from fastapi_vite_dara.config import settings
+
+# Third Party Libraries - Handle different Jinja versions
+try:
+    # Third Party Libraries
+    from markupsafe import Markup
+except ImportError:
+    # Third Party Libraries
+    from jinja2.utils.markupsafe import Markup
 
 
 class ViteLoader(object):
@@ -182,7 +187,7 @@ class ViteLoader(object):
         return "\n".join(tags)
 
 
-def vite_hmr_client() -> jinja2.utils.markupsafe.Markup:
+def vite_hmr_client() -> Markup:
     """
     Generates the script tag for the Vite WS client for HMR.
     Only used in development, in production this method returns
@@ -195,12 +200,10 @@ def vite_hmr_client() -> jinja2.utils.markupsafe.Markup:
     tags: list = []
     tags.append(ViteLoader().generate_vite_react_hmr())
     tags.append(ViteLoader().generate_vite_ws_client())
-    return jinja2.utils.markupsafe.Markup("\n".join(tags))
+    return Markup("\n".join(tags))
 
 
-def vite_asset(
-    path: str, scripts_attrs: Optional[Dict[str, str]] = None
-) -> jinja2.utils.markupsafe.Markup:
+def vite_asset(path: str, scripts_attrs: Optional[Dict[str, str]] = None) -> Markup:
     """
     Generates all assets include tags for the file in argument.
     Generates all scripts tags for this file and all its dependencies
@@ -219,9 +222,7 @@ def vite_asset(
     Returns:
         str -- All tags to import this asset in yout HTML page.
     """
-    return jinja2.utils.markupsafe.Markup(
-        ViteLoader().generate_vite_asset(path, scripts_attrs=scripts_attrs)
-    )
+    return Markup(ViteLoader().generate_vite_asset(path, scripts_attrs=scripts_attrs))
 
 
 def vite_asset_url(path: str) -> str:
