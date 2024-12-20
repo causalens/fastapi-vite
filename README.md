@@ -23,11 +23,11 @@ pip install fastapi-vite
 Configure Jinja templating for FastAPI
 
 ```python
-import fastapi_vite
+import fastapi_vite_dara
 
 templates = Jinja2Templates(directory='templates')
-templates.env.globals['vite_hmr_client'] = fastapi_vite.vite_hmr_client
-templates.env.globals['vite_asset'] = fastapi_vite.vite_asset
+templates.env.globals['vite_hmr_client'] = fastapi_vite_dara.vite_hmr_client
+templates.env.globals['vite_asset'] = fastapi_vite_dara.vite_asset
 
 ```
 

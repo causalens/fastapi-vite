@@ -7,9 +7,15 @@ except ImportError:  # pragma: nocover
 from typing import ClassVar, Dict, Optional
 from urllib.parse import urljoin
 
-from jinja2 import Markup
-
 from .config import settings
+
+# Third Party Libraries - Handle different Jinja versions
+try:
+    # Third Party Libraries
+    from markupsafe import Markup
+except ImportError:
+    # Third Party Libraries
+    from jinja2.utils.markupsafe import Markup
 
 
 class ViteLoader(object):

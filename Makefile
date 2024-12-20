@@ -56,12 +56,12 @@ install:
 
 
 check:
-	poetry run black --check fastapi_vite
-	poetry run isort --check fastapi_vite --skip .venv
-	poetry run flake8 fastapi_vite --exclude=node_modules,migrations
+	poetry run black --check fastapi_vite_dara
+	poetry run isort --check fastapi_vite_dara --skip .venv
+	poetry run flake8 fastapi_vite_dara --exclude=node_modules,migrations
 	poetry run pre-commit run
 
 fix:
-	poetry run pycln fastapi_vite --all --exclude '/(\.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|\.svn|_build|buck-out|build|dist|\.venv|node_modules)/'
-	poetry run isort fastapi_vite --skip .venv
-	poetry run black fastapi_vite --exclude '/(\.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|\.svn|_build|buck-out|build|dist|\.venv|node_modules)/'
+	poetry run pycln fastapi_vite_dara --all --exclude '/(\.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|\.svn|_build|buck-out|build|dist|\.venv|node_modules)/'
+	poetry run isort fastapi_vite_dara --skip .venv
+	poetry run black fastapi_vite_dara --exclude '/(\.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|\.svn|_build|buck-out|build|dist|\.venv|node_modules)/'
