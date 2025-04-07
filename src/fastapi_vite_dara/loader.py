@@ -3,11 +3,16 @@ import json
 from typing import ClassVar, Dict, Optional
 from urllib.parse import urljoin
 
-# Third Party Libraries
-import jinja2
-
 # Fastapi Vite
-from fastapi_vite.config import settings
+from fastapi_vite_dara.config import settings
+
+# Third Party Libraries - Handle different Jinja versions
+try:
+    # Third Party Libraries
+    from markupsafe import Markup
+except ImportError:
+    # Third Party Libraries
+    from jinja2.utils.markupsafe import Markup
 
 
 class ViteLoader(object):
@@ -34,13 +39,13 @@ class ViteLoader(object):
             RuntimeError: if cannot load the file or JSON in file is malformed.
         """
         if not settings.hot_reload:
-            with open(settings.manifest_path, "r") as manifest_file:
+            with open(settings.manifest_path, 'r') as manifest_file:
                 manifest_content = manifest_file.read()
             try:
                 self.manifest = json.loads(manifest_content)
             except Exception:
                 raise RuntimeError(
-                    "Cannot read Vite manifest file at {path}".format(
+                    'Cannot read Vite manifest file at {path}'.format(
                         path=settings.manifest_path,
                     )
                 )
@@ -55,23 +60,23 @@ class ViteLoader(object):
         Returns:
             str -- Full URL to the asset.
         """
-        base_path = "{protocol}://{host}:{port}".format(
+        base_path = '{protocol}://{host}:{port}'.format(
             protocol=settings.server_protocol,
             host=settings.server_host,
             port=settings.server_port,
         )
         return urljoin(
             base_path,
-            urljoin(settings.static_url, path if path is not None else ""),
+            urljoin(settings.static_url, path if path is not None else ''),
         )
 
     def generate_script_tag(
         self, src: str, attrs: Optional[Dict[str, str]] = None
     ) -> str:
         """Generates an HTML script tag."""
-        attrs_str = ""
+        attrs_str = ''
         if attrs is not None:
-            attrs_str = " ".join(
+            attrs_str = ' '.join(
                 [
                     '{key}="{value}"'.format(key=key, value=value)
                     for key, value in attrs.items()
@@ -103,11 +108,11 @@ class ViteLoader(object):
             str -- The script tag or an empty string.
         """
         if not settings.hot_reload:
-            return ""
+            return ''
 
         return self.generate_script_tag(
-            self.generate_vite_server_url("@vite/client"),
-            {"type": "module"},
+            self.generate_vite_server_url('@vite/client'),
+            {'type': 'module'},
         )
 
     def generate_vite_react_hmr(self) -> str:
@@ -130,7 +135,7 @@ class ViteLoader(object):
                 window.__vite_plugin_react_preamble_installed__=true
                 </script>
                 """
-        return ""
+        return ''
 
     def generate_vite_asset(
         self, path: str, scripts_attrs: Optional[Dict[str, str]] = None
@@ -144,45 +149,49 @@ class ViteLoader(object):
         if settings.hot_reload:
             return self.generate_script_tag(
                 self.generate_vite_server_url(path),
-                {"type": "module", "async": "", "defer": ""},
+                {'type': 'module', 'async': '', 'defer': ''},
             )
 
         if path not in self.manifest:
             raise RuntimeError(
-                f"Cannot find {path} in Vite manifest at {settings.manifest_path}"
+                f'Cannot find {path} in Vite manifest at {settings.manifest_path}'
             )
 
         tags = []
         manifest_entry: dict = self.manifest[path]
         if not scripts_attrs:
-            scripts_attrs = {"type": "module", "async": "", "defer": ""}
+            scripts_attrs = {'type': 'module', 'async': '', 'defer': ''}
 
         # Add dependent CSS
-        if "css" in manifest_entry:
-            for css_path in manifest_entry.get("css"):
+        if 'css' in manifest_entry:
+            for css_path in manifest_entry.get('css'):
                 tags.append(
-                    self.generate_stylesheet_tag(urljoin(settings.static_url, css_path))
+                    self.generate_stylesheet_tag(
+                        urljoin(settings.static_url, css_path)
+                    )
                 )
 
         # Add dependent "vendor"
-        if "imports" in manifest_entry:
-            for vendor_path in manifest_entry.get("imports"):
+        if 'imports' in manifest_entry:
+            for vendor_path in manifest_entry.get('imports'):
                 tags.append(
-                    self.generate_vite_asset(vendor_path, scripts_attrs=scripts_attrs)
+                    self.generate_vite_asset(
+                        vendor_path, scripts_attrs=scripts_attrs
+                    )
                 )
 
         # Add the script by itself
         tags.append(
             self.generate_script_tag(
-                urljoin(settings.static_url, manifest_entry["file"]),
+                urljoin(settings.static_url, manifest_entry['file']),
                 attrs=scripts_attrs,
             )
         )
 
-        return "\n".join(tags)
+        return '\n'.join(tags)
 
 
-def vite_hmr_client() -> jinja2.utils.markupsafe.Markup:
+def vite_hmr_client() -> Markup:
     """
     Generates the script tag for the Vite WS client for HMR.
     Only used in development, in production this method returns
@@ -195,12 +204,12 @@ def vite_hmr_client() -> jinja2.utils.markupsafe.Markup:
     tags: list = []
     tags.append(ViteLoader().generate_vite_react_hmr())
     tags.append(ViteLoader().generate_vite_ws_client())
-    return jinja2.utils.markupsafe.Markup("\n".join(tags))
+    return Markup('\n'.join(tags))
 
 
 def vite_asset(
     path: str, scripts_attrs: Optional[Dict[str, str]] = None
-) -> jinja2.utils.markupsafe.Markup:
+) -> Markup:
     """
     Generates all assets include tags for the file in argument.
     Generates all scripts tags for this file and all its dependencies
@@ -219,7 +228,7 @@ def vite_asset(
     Returns:
         str -- All tags to import this asset in yout HTML page.
     """
-    return jinja2.utils.markupsafe.Markup(
+    return Markup(
         ViteLoader().generate_vite_asset(path, scripts_attrs=scripts_attrs)
     )
 
