@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import reactRefresh from '@vitejs/plugin-react-refresh'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 const Dotenv = require("dotenv");
 import path from "path";
 Dotenv.config({ path: path.join(__dirname, ".env") });
@@ -9,23 +9,18 @@ const STATIC_URL = process.env.STATIC_URL;
 export default defineConfig({
   base: `${STATIC_URL}`,
   clearScreen: false,
-  plugins: [
-    reactRefresh(),
-
-  ],
+  plugins: [react()],
   build: {
     target: "esnext",
-    outDir: "../static",
+    outDir: "./static/",
     emptyOutDir: true,
     assetsDir: "",
     manifest: true,
 
-		rollupOptions: {
-      input:  "./assets/javascript/main.tsx"
-		},
-
+    rollupOptions: {
+      input: "./assets/javascript/main.tsx",
+    },
   },
 
-  root: "assets/", // You can change the root path as you wish
-
-})
+  root: ".", // You can change the root path as you wish
+});

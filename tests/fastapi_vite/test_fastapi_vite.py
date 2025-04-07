@@ -1,9 +1,12 @@
 from fastapi_vite_dara import __version__
 from starlette.testclient import TestClient
 
+# Fastapi Vite
+from fastapi_vite import __version__
+
 
 def test_version():
-    assert __version__ == "0.1.0"
+    assert __version__ == "0.3.2"
 
 
 def test_homepage():
