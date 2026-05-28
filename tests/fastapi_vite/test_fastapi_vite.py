@@ -1,4 +1,4 @@
-# Third Party Libraries
+from fastapi_vite_dara import __version__
 from starlette.testclient import TestClient
 
 # Fastapi Vite

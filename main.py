@@ -5,15 +5,15 @@ from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
 # Fastapi Vite
-from fastapi_vite import runner, settings, vite_asset, vite_hmr_client
+from fastapi_vite_dara import runner, settings, vite_asset, vite_hmr_client
 
-templates = Jinja2Templates(directory="assets/templates")
-templates.env.globals["vite_hmr_client"] = vite_hmr_client
-templates.env.globals["vite_asset"] = vite_asset
+templates = Jinja2Templates(directory='assets/templates')
+templates.env.globals['vite_hmr_client'] = vite_hmr_client
+templates.env.globals['vite_asset'] = vite_asset
 
 
 async def homepage(request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse('index.html', {'request': request})
 
 
 async def on_startup():
@@ -25,11 +25,11 @@ async def on_shutdown():
 
 
 routes = [
-    Route("/", endpoint=homepage),
+    Route('/', endpoint=homepage),
     Mount(
         settings.static_url,
         StaticFiles(directory=settings.static_path),
-        name="static",
+        name='static',
     ),
 ]
 

@@ -90,3 +90,28 @@ version-bump-minor: ## bump minor version
 version-bump-patch: ## bump patch version
 	poetry run bump2version patch
 
+install-deps-ubuntu:
+	sudo apt update && sudo apt install -y build-essential python3 make libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
+
+
+install-runtime:
+	poetry config virtualenvs.in-project true
+	poetry install --no-dev
+
+
+install:
+	poetry config virtualenvs.in-project true
+	poetry install
+
+
+check:
+	poetry run black --check fastapi_vite_dara
+	poetry run isort --check fastapi_vite_dara --skip .venv
+	poetry run flake8 fastapi_vite_dara --exclude=node_modules,migrations
+	poetry run pre-commit run
+
+fix:
+	poetry run pycln fastapi_vite_dara --all --exclude '/(\.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|\.svn|_build|buck-out|build|dist|\.venv|node_modules)/'
+	poetry run isort fastapi_vite_dara --skip .venv
+	poetry run black fastapi_vite_dara --exclude '/(\.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|\.svn|_build|buck-out|build|dist|\.venv|node_modules)/'
